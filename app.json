@@ -1,7 +1,12 @@
 {
   "expo": {
-    "name": "AwesomeProject",
-    "slug": "AwesomeProject",
+    "name": "T-Book Club",
+    "splash": {
+          "image": "./images/logo.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        },
+    "slug": "T-Book Club",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

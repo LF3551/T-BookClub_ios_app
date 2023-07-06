@@ -1,12 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+import * as Font from 'expo-font';
+Font.loadAsync({
+  TeleNeo: require('./assets/fonts/TeleNeoOffice.ttf'),
+});
 
 export default function App() {
+    useEffect(() => {
+        async function prepare() {
+          await SplashScreen.preventAutoHideAsync();
+        }
+
+        prepare();
+      }, []);
   const clubMembers = ['John', 'Sarah', 'Michael']; // Здесь вы можете указать список участников книжного клуба
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+  const openLoginModal = () => {
+        setIsLoginModalOpen(true);
+      };
+
+  const closeLoginModal = () => {
+        setIsLoginModalOpen(false);
+      };
   const openRegistrationModal = () => {
     setIsModalOpen(true);
   };
@@ -14,11 +33,12 @@ export default function App() {
   const closeRegistrationModal = () => {
     setIsModalOpen(false);
   };
-
+  
+  
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Welcome to the T-Book Club!</Text>
-      <Image source={require('/Users/alekseialeinikov/Documents/Scripts/MOBILE/AwesomeProject/images/logo.png')} style={styles.image} />
+      <Image source={require('./images/logo.png')} style={styles.image} />
       <StatusBar style="auto" />
       <Text>Club Members:</Text>
       {clubMembers.map((member) => (
@@ -26,16 +46,35 @@ export default function App() {
       ))}
       <StatusBar style="auto" />
       <Text style={styles.motivationalText}>Join the motivated reader&apos;s community!</Text>
-  
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={openRegistrationModal}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-  
+          
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={openLoginModal}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={openRegistrationModal}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+          
+      {/* Модальное окно для входа */}
+                <Modal visible={isLoginModalOpen} animationType="slide" transparent={true}>
+                  <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                      {/* Форма входа */}
+                      <View style={styles.loginForm}>
+                        <TextInput style={styles.input} placeholder="Email" />
+                        <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+                        <TouchableOpacity style={styles.button}>
+                          <Text style={styles.buttonText}>Log In</Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      <TouchableOpacity style={styles.closeButton} onPress={closeLoginModal}>
+                        <Text style={styles.closeButtonText}>Close</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
       {/* Модальное окно регистрации */}
       <Modal visible={isModalOpen} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
@@ -103,8 +142,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: 'bold',
+    fontFamily: 'TeleNeo',
   },
   modalContainer: {
     flex: 1,
@@ -132,14 +172,19 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: 'red',
+    backgroundColor: '#E10075',
     borderRadius: 5,
     padding: 10,
+    fontSize: 22,
+    fontFamily: 'TeleNeo',
     alignItems: 'center',
   },
   closeButtonText: {
     color: 'white',
     fontWeight: 'bold',
   },
+    loginForm: {
+      marginTop: 20,
+    },
 });
 
